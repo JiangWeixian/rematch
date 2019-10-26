@@ -3,6 +3,11 @@
 
 > model is minimum unit in rematch v2
 
+## Install
+> rematch2 is incompatible with rematch plugins
+
+`npm install @rematch2/core --save`
+
 ## Feature
 
 1. typo in createModel
