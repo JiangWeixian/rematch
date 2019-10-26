@@ -1,16 +1,16 @@
 {
-  "name": "@ruguoapp/rematch2-core",
-  "version": "0.0.6",
+  "name": "@rematch2/core",
+  "version": "0.0.0",
   "description": "A Redux Framework",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iftechio/rematch2.git"
+    "url": "https://github.com/JiangWeixian/rematch-v2"
   },
   "bugs": {
-    "url": "https://github.com/iftechio/rematch2/issues"
+    "url": "https://github.com/JiangWeixian/rematch-v2/issues"
   },
-  "homepage": "https://github.com/iftechio/rematch2#readme",
+  "homepage": "https://github.com/JiangWeixian/rematch-v2#readme",
   "keywords": [
     "@rematch",
     "rematch",
