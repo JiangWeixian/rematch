@@ -1,36 +1,35 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:latest"
-    ],
-    "jsRules": {},
-    "rules": {
-        "align": [true, "parameters", "statements"],
-        "arrow-parens": false,
-        "quotemark": [
-            true,
-            "single"
-        ],
-        "semicolon": [
-            true,
-            "never"
-        ],
-        "indent": [
-            true,
-            "tabs",
-            2
-        ],
-        "interface-name": false,
-        "no-submodule-imports": false,
-        "no-console": [
-            true,
-            "log"
-        ],
-        "object-literal-sort-keys": false,
-        "trailing-comma": [
-            true,
-            { "esSpecCompliant": true } 
-        ]
-    },
-    "rulesDirectory": []
+	"defaultSeverity": "error",
+	"extends": [
+		"tslint:latest",
+		"tslint-plugin-prettier",
+		"tslint-config-prettier"
+	],
+	"jsRules": {},
+	"rules": {
+		"prettier": true,
+		"no-string-literal": false,
+		"align": [true, "parameters", "statements"],
+		"arrow-parens": false,
+		"quotemark": false,
+		"semicolon": [
+			true,
+			"never"
+		],
+		"ban-types": false,
+		"interface-name": false,
+		"no-submodule-imports": false,
+		"no-console": [
+			true,
+			"log"
+		],
+		"no-object-literal-type-assertion": false,
+		"interface-over-type-literal": false,
+		"object-literal-sort-keys": false,
+		"trailing-comma": [
+			true,
+			{ "esSpecCompliant": true } 
+		]
+	},
+	"rulesDirectory": []
 }
