@@ -1,5 +1,5 @@
 /*
- * Type definitions for Rematch2 v1.0.0
+ * Type definitions for rematch-v2
  * Project: Rematch
  * Definitions by:
  * Shawn McKay https://github.com/shmck

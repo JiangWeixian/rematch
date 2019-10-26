@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 
-import { RootState } from '@rematch2/core'
 import { useIncrement } from './hooks/use-increment'
-import { Dispatch } from './store'
+import { Dispatch, RootState } from './store'
 
 const mapState = (state: RootState) => ({
   dolphins: state.dolphins,
@@ -15,7 +14,7 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = (dispatch: Dispatch) => ({
-  incrementDolphins: dispatch.dolphins.increment(),
+  incrementDolphins: dispatch.dolphins.increment,
   incrementDolphinsAsync: dispatch.dolphins.incrementAsync,
   incrementSharks: () => dispatch.sharks.increment(1),
   incrementSharksAsync: () => dispatch.sharks.incrementAsync(1),
@@ -84,7 +83,6 @@ function Count(props: Props) {
         <button onClick={props.incrementCityPerson}>+1</button>
         <button onClick={props.incremetnCityZooDolphins}>Async +1</button>
       </div>
-      <p>Using Rematch Models</p>
     </div>
   )
 }
