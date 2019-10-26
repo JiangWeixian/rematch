@@ -1,6 +1,6 @@
 {
   "name": "@rematch2/core",
-  "version": "0.0.2-alpha.0",
+  "version": "0.0.0",
   "description": "A Redux Framework",
   "license": "MIT",
   "repository": {
@@ -116,5 +116,5 @@
     "typings-tester": "0.3.2",
     "uglify-es": "3.3.9"
   },
-  "gitHead": "fe34494a13317cc12cd13d9d001e94d42f90c46b"
+  "gitHead": "5217138f35da593fe76cb26afb9c9de6d3214be2"
 }
