@@ -1,7 +1,7 @@
 {
   "name": "rematch2",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "rethink rematch",
   "main": "index.js",
   "directories": {
     "doc": "docs",
