@@ -1,8 +1,11 @@
 {
   "name": "@rematch2/core",
-  "version": "0.0.1-alpha.0",
-  "description": "A Redux Framework",
+  "version": "0.0.0",
+  "description": "rethink rematch",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/JiangWeixian/rematch-v2"
@@ -116,5 +119,5 @@
     "typings-tester": "0.3.2",
     "uglify-es": "3.3.9"
   },
-  "gitHead": "5217138f35da593fe76cb26afb9c9de6d3214be2"
+  "gitHead": "fc0d837019f4259458f85f72b7672ca8dc13da09"
 }
