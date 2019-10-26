@@ -10,7 +10,6 @@ export const sharks = createModel({
     setLoading: (state: SharksState, payload: boolean) => state + 1,
   },
   effects: {
-    // TODO: Optional args breaks TypeScript autocomplete (e.g. payload: number = 1)
     async incrementAsync(payload: number) {
       await delay(500)
       this.setLoading(true)

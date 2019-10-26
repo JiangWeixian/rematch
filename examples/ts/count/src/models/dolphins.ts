@@ -6,7 +6,7 @@ export type DolphinsState = number
 export const dolphins = createModel({
   state: 0,
   reducers: {
-    increment: (state: DolphinsState) => state + 1,
+    increment: state => state + 1,
   },
   effects: {
     async incrementAsync() {

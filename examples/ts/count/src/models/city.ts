@@ -21,9 +21,8 @@ export const city = combineModels({
     },
   },
   effects: {
-    async incrementCityAsync(payload: void, rootState, currentState) {
+    async incrementCityAsync(payload: void) {
       await delay(500)
-      console.log(rootState, currentState)
       this.person.increment()
       this.zoo.incrementDolphinsAndSharksAsync()
     },
