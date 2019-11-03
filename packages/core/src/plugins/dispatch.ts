@@ -38,6 +38,7 @@ import validate from '../utils/validate'
 const recurBindDispatch = (
   modelName: string,
   prefix: string,
+  actions: object,
   reducers: any,
   createDispatcher: Function,
   context: any,
@@ -52,15 +53,18 @@ const recurBindDispatch = (
         extraDispatch = recurBindDispatch(
           modelName,
           nextPrefix,
+          actions,
           reducers[key],
           createDispatcher,
           context,
         )
       } else {
         const nextPrefix = key === modelName ? key : `${prefix}/${key}`
+        actions[key] = {}
         nextDispatch[key] = recurBindDispatch(
           modelName,
           nextPrefix,
+          actions[key],
           reducers[key],
           createDispatcher,
           context,
@@ -78,7 +82,11 @@ const recurBindDispatch = (
           `Invalid reducer (${prefix}/${key}). Must be a function`,
         ],
       ])
-      nextDispatch[key] = createDispatcher.apply(context, [prefix, key])
+      actions[key] = createDispatcher(prefix, key)
+      nextDispatch[key] = async (payload: any, meta: any) => {
+        const action = await actions[key](payload, meta)
+        context.dispatch(action)
+      }
     })
     return nextDispatch
   }
@@ -126,9 +134,11 @@ const dispatchPlugin: R.Plugin = {
         if (typeof meta !== 'undefined') {
           action.meta = meta
         }
-        return this.dispatch(action)
+        return action
       }
     },
+
+    actions: {},
   },
 
   // access store.dispatch after store is created
@@ -141,12 +151,14 @@ const dispatchPlugin: R.Plugin = {
   // generate action creators for all model.reducers
   onModel(model: R.Model) {
     this.dispatch[model.name] = {}
+    this.actions[model.name] = {}
     if (!model.reducers) {
       return
     }
     this.dispatch[model.name] = recurBindDispatch(
       model.name,
       model.name,
+      this.actions[model.name],
       model.reducers,
       this.createDispatcher,
       this,

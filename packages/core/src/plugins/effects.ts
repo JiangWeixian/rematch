@@ -33,6 +33,7 @@ const recurBindEffectDispatch = (
   modelName: string,
   prefix: string,
   effects: any,
+  actions: any,
   normalizedEffects: any,
   dispatch: Function,
   createDispatcher: Function,
@@ -42,23 +43,25 @@ const recurBindEffectDispatch = (
   const effectKeys = Object.keys(effects)
   if (isModels(effects)) {
     effectKeys.forEach(key => {
-      if (prefix.endsWith(key) || key === modelName) {
+      if (prefix.endsWith(key)) {
         const nextPrefix = prefix
         recurBindEffectDispatch(
           modelName,
           nextPrefix,
           effects[key],
+          actions,
           normalizedEffects,
           dispatch,
           createDispatcher,
           context,
         )
       } else {
-        const nextPrefix = `${prefix}/${key}`
+        const nextPrefix = key === modelName ? key : `${prefix}/${key}`
         recurBindEffectDispatch(
           modelName,
           nextPrefix,
           effects[key],
+          actions[key],
           normalizedEffects,
           dispatch[key],
           createDispatcher,
@@ -77,7 +80,11 @@ const recurBindEffectDispatch = (
         ],
       ])
       normalizedEffects[`${prefix}/${key}`] = effects[key].bind(dispatch)
-      dispatch[key] = createDispatcher.apply(context, [prefix, key])
+      actions[key] = createDispatcher(prefix, key)
+      dispatch[key] = async (payload: any, meta: any) => {
+        const action = await actions[key](payload, meta)
+        context.dispatch(action)
+      }
       dispatch[key].isEffect = true
     })
   }
@@ -99,11 +106,11 @@ const effectsPlugin: R.Plugin = {
     if (!model.effects) {
       return
     }
-
     recurBindEffectDispatch(
       model.name,
       model.name,
       model.effects,
+      this.actions[model.name],
       this.effects,
       this.dispatch[model.name],
       this.createDispatcher,
