@@ -29,7 +29,7 @@ const effectsPlugin: R.Plugin = {
         this.effects[`${prefix}/${key}`] = effect.bind(dispatch)
         actions[key] = this.createDispatcher(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
-          const action = await actions[key](payload, meta)
+          const action = actions[key](payload, meta)
           this.dispatch(action)
         }
         dispatch[key].isEffect = true

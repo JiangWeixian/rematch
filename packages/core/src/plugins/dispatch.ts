@@ -35,7 +35,7 @@ const dispatchPlugin: R.Plugin = {
      * @param reducerName string
      */
     createDispatcher(modelName: string, reducerName: string) {
-      return async (payload?: any, meta?: any): Promise<any> => {
+      return (payload?: any, meta?: any) => {
         const action: R.Action = { type: `${modelName}/${reducerName}` }
         if (typeof payload !== 'undefined') {
           action.payload = payload
@@ -73,7 +73,7 @@ const dispatchPlugin: R.Plugin = {
       (prefix, key, actions, dispatch) => {
         actions[key] = this.createDispatcher(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
-          const action = await actions[key](payload, meta)
+          const action = actions[key](payload, meta)
           this.dispatch(action)
         }
       },
