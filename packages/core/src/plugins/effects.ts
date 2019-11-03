@@ -2,7 +2,8 @@
 import * as R from '../typings'
 import { getCurrentModelState } from '../utils/getCurrentModelState'
 import { isModels } from '../utils/isModels'
-import validate from '../utils/validate'
+import { validate } from '../utils/validate'
+import { walk } from '../utils/walk'
 
 /**
  * similar with recurBindDispatch, same dispatch behaviours
@@ -106,15 +107,21 @@ const effectsPlugin: R.Plugin = {
     if (!model.effects) {
       return
     }
-    recurBindEffectDispatch(
+    walk(
       model.name,
       model.name,
       model.effects,
       this.actions[model.name],
-      this.effects,
       this.dispatch[model.name],
-      this.createDispatcher,
-      this,
+      (prefix, key, actions, dispatch, effect) => {
+        this.effects[`${prefix}/${key}`] = effect.bind(dispatch)
+        actions[key] = this.createDispatcher(prefix, key)
+        dispatch[key] = async (payload: any, meta: any) => {
+          const action = await actions[key](payload, meta)
+          this.dispatch(action)
+        }
+        dispatch[key].isEffect = true
+      },
     )
     this.dispatch[model.name].dispatch = this.dispatch
   },

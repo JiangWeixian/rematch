@@ -1,4 +1,5 @@
 import * as R from './typings'
+import { validate } from './utils/validate'
 
 /**
  * inject reducer & effects typo on this
@@ -8,5 +9,11 @@ import * as R from './typings'
 export function createModel<S, RE extends R.ModelReducers<any>, E extends R.ModelEffects<any>, SS>(
   model: R.ModelDescriptor<S, RE, E, SS>,
 ): R.ModelDescriptor<S, RE, E, SS> {
+  validate([
+    [
+      model.effects && typeof model.effects === 'function',
+      `Model.effects as function is not allowed`,
+    ],
+  ])
   return model as R.ModelDescriptor<S, RE, E, SS>
 }

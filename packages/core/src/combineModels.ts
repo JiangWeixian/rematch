@@ -1,5 +1,5 @@
 import * as R from './typings'
-import validate from './utils/validate'
+import { validate } from './utils/validate'
 
 export function combineModels<
   M extends R.Models,
@@ -50,6 +50,7 @@ export function combineModels<
     finalModel.reducers[name] = reducers
   }
   if (effects) {
+    validate([[typeof effects === 'function', `Model.effects as function is not allowed`]])
     finalModel.effects[name] = effects
   }
   finalModel.baseReducer = baseReducer

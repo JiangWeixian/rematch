@@ -1,6 +1,6 @@
 import * as R from '../typings'
 import { isModels } from '../utils/isModels'
-import validate from '../utils/validate'
+import { validate } from '../utils/validate'
 
 /**
  * this.modelname.submodelname.reducername() will dispatch({ type: 'modelname/submodelname/reducername' })

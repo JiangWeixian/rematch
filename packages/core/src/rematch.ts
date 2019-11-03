@@ -3,7 +3,7 @@ import dispatchPlugin from './plugins/dispatch'
 import effectsPlugin from './plugins/effects'
 import createRedux from './redux'
 import * as R from './typings'
-import validate from './utils/validate'
+import { validate } from './utils/validate'
 
 const corePlugins: R.Plugin[] = [dispatchPlugin, effectsPlugin]
 
