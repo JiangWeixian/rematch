@@ -1,5 +1,5 @@
 import * as R from '../typings'
-import validate from './validate'
+import { validate } from './validate'
 
 const merge = (original: any, next: any): any => {
   return next ? { ...next, ...(original || {}) } : original || {}

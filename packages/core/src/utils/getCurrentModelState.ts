@@ -1,4 +1,4 @@
-import validate from '../utils/validate'
+import { validate } from '../utils/validate'
 
 /**
  * - `modelname/submodelname/effectname`, currentState is rootState[modelName][subModelName]

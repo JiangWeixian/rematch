@@ -1,5 +1,5 @@
 import * as R from './typings'
-import validate from './utils/validate'
+import { validate } from './utils/validate'
 
 /**
  * PluginFactory

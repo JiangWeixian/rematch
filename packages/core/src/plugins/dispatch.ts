@@ -1,93 +1,10 @@
 import * as R from '../typings'
-import { isModels } from '../utils/isModels'
-import validate from '../utils/validate'
-
-/**
- * this.modelname.submodelname.reducername() will dispatch({ type: 'modelname/submodelname/reducername' })
- * ```js
- * city: {
- *   zoo: {
- *     dolphins, // reducers
- *     sharks, // reducers
- *     zoo? // reducers
- *   },
- *   person // reducers
- *   city: // reducers
- * }
- * ```
- * 1. reducer in zoo.dolphins will dispatch({ type: 'city/zoo/dolphins/reducer' })
- * 2. reduer in zoo.zoo will dispatch({ type: city/zoo/reducer })
- * 3. reducer in city.person will dispatch({ type: city/reducer })
- * 4. reducer in city.city will dispatch({ type: city/reducer })
- * @param modelName model.name(root)
- * @param prefix model.name -> model.name/submodel.name -> model.name/submodel.name/reducername
- * @param reducers model.reducers
- * ```js
- * // option1
- * reducers: {
- *   [reducerKey]: reducer
- * }
- * // option2
- * reducers: {
- *   [submodelName]: ModelReducers // or recur option2
- * }
- * ```
- * @param createDispatcher dispatchPlugin.createDispatcher
- * @param context
- */
-const recurBindDispatch = (
-  modelName: string,
-  prefix: string,
-  reducers: any,
-  createDispatcher: Function,
-  context: any,
-) => {
-  const reducerKeys = Object.keys(reducers)
-  const nextDispatch = {}
-  let extraDispatch = {}
-  if (isModels(reducers)) {
-    reducerKeys.forEach(key => {
-      if (prefix.endsWith(key)) {
-        const nextPrefix = prefix
-        extraDispatch = recurBindDispatch(
-          modelName,
-          nextPrefix,
-          reducers[key],
-          createDispatcher,
-          context,
-        )
-      } else {
-        const nextPrefix = key === modelName ? key : `${prefix}/${key}`
-        nextDispatch[key] = recurBindDispatch(
-          modelName,
-          nextPrefix,
-          reducers[key],
-          createDispatcher,
-          context,
-        )
-      }
-    })
-    return { ...nextDispatch, ...extraDispatch }
-  } else {
-    reducerKeys.forEach(key => {
-      validate([
-        [!!key.match(/\/.+\//) || !!key.match(/\//), `Invalid reducer name (${prefix}/${key})`],
-        [key === 'dispatch', `Reducer can not name 'dispatch'`],
-        [
-          typeof reducers[key] !== 'function',
-          `Invalid reducer (${prefix}/${key}). Must be a function`,
-        ],
-      ])
-      nextDispatch[key] = createDispatcher.apply(context, [prefix, key])
-    })
-    return nextDispatch
-  }
-}
+import { walk } from '../utils/walk'
 
 /**
  * Dispatch Plugin
  *
- * generates dispatch[modelName][actionName]
+ * generates dispatch[modelName][subModelName]...[actionName]
  */
 const dispatchPlugin: R.Plugin = {
   exposed: {
@@ -118,7 +35,7 @@ const dispatchPlugin: R.Plugin = {
      * @param reducerName string
      */
     createDispatcher(modelName: string, reducerName: string) {
-      return async (payload?: any, meta?: any): Promise<any> => {
+      return (payload?: any, meta?: any) => {
         const action: R.Action = { type: `${modelName}/${reducerName}` }
         if (typeof payload !== 'undefined') {
           action.payload = payload
@@ -126,9 +43,10 @@ const dispatchPlugin: R.Plugin = {
         if (typeof meta !== 'undefined') {
           action.meta = meta
         }
-        return this.dispatch(action)
+        return action
       }
     },
+    actions: {},
   },
 
   // access store.dispatch after store is created
@@ -141,16 +59,26 @@ const dispatchPlugin: R.Plugin = {
   // generate action creators for all model.reducers
   onModel(model: R.Model) {
     this.dispatch[model.name] = {}
+    this.actions[model.name] = {}
     if (!model.reducers) {
       return
     }
-    this.dispatch[model.name] = recurBindDispatch(
-      model.name,
-      model.name,
-      model.reducers,
-      this.createDispatcher,
-      this,
-    )
+    walk({
+      modelName: model.name,
+      prefix: model.name,
+      effectsOrreducers: model.reducers,
+      actions: this.actions[model.name],
+      dispatch: this.dispatch[model.name],
+      onActionCallback: (prefix, key, actions, dispatch, reducer) => {
+        actions[key] = this.createDispatcher(prefix, key)
+        dispatch[key] = async (payload: any, meta: any) => {
+          const action = actions[key](payload, meta)
+          this.dispatch(action)
+        }
+      },
+    })
+    // tslint:disable-next-line:no-console
+    console.log(this.reducers)
   },
 }
 
