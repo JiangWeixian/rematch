@@ -19,13 +19,13 @@ const effectsPlugin: R.Plugin = {
     if (!model.effects) {
       return
     }
-    walk(
-      model.name,
-      model.name,
-      model.effects,
-      this.actions[model.name],
-      this.dispatch[model.name],
-      (prefix, key, actions, dispatch, effect) => {
+    walk({
+      modelName: model.name,
+      prefix: model.name,
+      effectsOrreducers: model.effects,
+      actions: this.actions[model.name],
+      dispatch: this.dispatch[model.name],
+      onActionCallback: (prefix, key, actions, dispatch, effect) => {
         this.effects[`${prefix}/${key}`] = effect.bind(dispatch)
         actions[key] = this.createDispatcher(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
@@ -34,7 +34,7 @@ const effectsPlugin: R.Plugin = {
         }
         dispatch[key].isEffect = true
       },
-    )
+    })
     this.dispatch[model.name].dispatch = this.dispatch
   },
 

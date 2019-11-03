@@ -46,7 +46,6 @@ const dispatchPlugin: R.Plugin = {
         return action
       }
     },
-
     actions: {},
   },
 
@@ -64,20 +63,22 @@ const dispatchPlugin: R.Plugin = {
     if (!model.reducers) {
       return
     }
-    walk(
-      model.name,
-      model.name,
-      model.reducers,
-      this.actions[model.name],
-      this.dispatch[model.name],
-      (prefix, key, actions, dispatch) => {
+    walk({
+      modelName: model.name,
+      prefix: model.name,
+      effectsOrreducers: model.reducers,
+      actions: this.actions[model.name],
+      dispatch: this.dispatch[model.name],
+      onActionCallback: (prefix, key, actions, dispatch, reducer) => {
         actions[key] = this.createDispatcher(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
           const action = actions[key](payload, meta)
           this.dispatch(action)
         }
       },
-    )
+    })
+    // tslint:disable-next-line:no-console
+    console.log(this.reducers)
   },
 }
 

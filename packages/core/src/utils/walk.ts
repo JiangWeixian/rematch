@@ -27,7 +27,7 @@ import { validate } from './validate'
  * @param context
  */
 
-type Callback = (
+type ActionCallback = (
   prefix: string,
   key: string,
   actions: any,
@@ -35,29 +35,52 @@ type Callback = (
   effectOrreducer: Function,
 ) => void
 
-export const walk = (
-  modelName: string,
-  prefix: string,
-  effectsOrreducers: any,
-  actions: any,
-  dispatch: Function,
-  callback: Callback,
-) => {
+export const walk = ({
+  modelName,
+  prefix,
+  effectsOrreducers,
+  actions,
+  dispatch,
+  onActionCallback,
+}: {
+  modelName: string
+  prefix: string
+  effectsOrreducers: any
+  actions: any
+  dispatch: Function
+  onActionCallback?: ActionCallback
+}) => {
   const keys = Object.keys(effectsOrreducers)
   if (isModels(effectsOrreducers)) {
     keys.forEach(key => {
       if (prefix.endsWith(key)) {
-        const nextPrefix = prefix
-        walk(modelName, nextPrefix, effectsOrreducers[key], actions, dispatch, callback)
+        walk({
+          modelName,
+          prefix,
+          effectsOrreducers: effectsOrreducers[key],
+          actions,
+          dispatch,
+          onActionCallback,
+        })
       } else {
         const nextPrefix = key === modelName ? key : `${prefix}/${key}`
         actions[key] = actions[key] || {}
         dispatch[key] = dispatch[key] || {}
-        walk(modelName, nextPrefix, effectsOrreducers[key], actions[key], dispatch[key], callback)
+        walk({
+          modelName,
+          prefix: nextPrefix,
+          effectsOrreducers: effectsOrreducers[key],
+          actions: actions[key],
+          dispatch: dispatch[key],
+          onActionCallback,
+        })
       }
     })
   } else {
     keys.forEach(key => {
+      if (!onActionCallback) {
+        return
+      }
       validate([
         [
           !!key.match(/\/.+\//) || !!key.match(/\//),
@@ -69,7 +92,7 @@ export const walk = (
           `Invalid effect or reducer (${prefix}/${key}). Must be a function`,
         ],
       ])
-      callback(prefix, key, actions, dispatch, effectsOrreducers[key])
+      onActionCallback(prefix, key, actions, dispatch, effectsOrreducers[key])
     })
   }
 }
