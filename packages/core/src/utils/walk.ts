@@ -51,6 +51,8 @@ export const walk = (
         walk(modelName, nextPrefix, effectsOrreducers[key], actions, dispatch, callback)
       } else {
         const nextPrefix = key === modelName ? key : `${prefix}/${key}`
+        actions[key] = actions[key] || {}
+        dispatch[key] = dispatch[key] || {}
         walk(modelName, nextPrefix, effectsOrreducers[key], actions[key], dispatch[key], callback)
       }
     })
