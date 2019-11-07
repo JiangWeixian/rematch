@@ -17,6 +17,7 @@ export type CombinedModel<
   extraEffects extends ModelEffects<any> = any
 > = {
   name?: string
+  init?: Function
   state: ExtractRematchStateFromModels<M>
   baseReducer?: (
     state: ExtractRematchStateFromModels<M>,
@@ -144,6 +145,11 @@ export type ModelDescriptor<
 > = {
   name?: string
   state: S
+  init?: Function &
+    ThisType<
+      ExtractRematchDispatchersFromReducers<R> &
+        ExtractRematchDispatchersFromEffects<E> & { dispatch: (action: Action) => void }
+    >
   baseReducer?: (state: SS, action: Action) => SS
   reducers?: R
   effects?: E &
@@ -165,11 +171,18 @@ export function combineModels<
   name,
   models,
   reducers,
+  init,
   effects,
   baseReducer,
 }: {
   name: string
   models: M
+  init?: Function &
+    ThisType<
+      ExtractRematchDispatchersFromReducers<R> &
+        ExtractRematchDispatchersFromEffects<E> &
+        ExtractRematchDispatchersFromModels<M> & { dispatch: (action: Action) => void }
+    >
   baseReducer?: ModelConfig<ExtractRematchStateFromModels<M>>['baseReducer']
   reducers?: R
   effects?: E &
@@ -230,6 +243,7 @@ export interface Model<S = any, SS = S> extends ModelConfig<S, SS> {
 export interface ModelConfig<S = any, SS = S> {
   name?: string
   state: S
+  init?: Function
   baseReducer?: (state: SS, action: Action) => SS
   reducers?: ModelReducers<S>
   effects?: ModelEffects<any>

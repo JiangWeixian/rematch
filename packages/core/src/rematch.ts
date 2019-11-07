@@ -1,11 +1,12 @@
 import pluginFactory from './pluginFactory'
 import dispatchPlugin from './plugins/dispatch'
 import effectsPlugin from './plugins/effects'
+import initPlugin from './plugins/init'
 import createRedux from './redux'
 import * as R from './typings'
 import { validate } from './utils/validate'
 
-const corePlugins: R.Plugin[] = [dispatchPlugin, effectsPlugin]
+const corePlugins: R.Plugin[] = [dispatchPlugin, effectsPlugin, initPlugin]
 
 /**
  * Rematch class
