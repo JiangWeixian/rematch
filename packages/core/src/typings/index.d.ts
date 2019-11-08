@@ -11,12 +11,17 @@ import * as Redux from 'redux'
 
 export as namespace rematch
 
+export type LifeCycle = {
+  init?(): void
+}
+
 export type CombinedModel<
   M extends Models = any,
   extraReducers extends ModelReducers<any> = any,
   extraEffects extends ModelEffects<any> = any
 > = {
   name?: string
+  init?: Function
   state: ExtractRematchStateFromModels<M>
   baseReducer?: (
     state: ExtractRematchStateFromModels<M>,
@@ -151,6 +156,11 @@ export type ModelDescriptor<
       ExtractRematchDispatchersFromReducers<R> &
         ExtractRematchDispatchersFromEffects<E> & { dispatch: (action: Action) => void }
     >
+  lifecycle?: LifeCycle &
+    ThisType<
+      ExtractRematchDispatchersFromReducers<R> &
+        ExtractRematchDispatchersFromEffects<E> & { dispatch: (action: Action) => void }
+    >
 }
 
 export function createModel<S, R extends ModelReducers<S>, E extends ModelEffects<S>>(
@@ -165,11 +175,18 @@ export function combineModels<
   name,
   models,
   reducers,
+  lifecycle,
   effects,
   baseReducer,
 }: {
   name: string
   models: M
+  lifecycle?: LifeCycle &
+    ThisType<
+      ExtractRematchDispatchersFromReducers<R> &
+        ExtractRematchDispatchersFromEffects<E> &
+        ExtractRematchDispatchersFromModels<M> & { dispatch: (action: Action) => void }
+    >
   baseReducer?: ModelConfig<ExtractRematchStateFromModels<M>>['baseReducer']
   reducers?: R
   effects?: E &
@@ -230,6 +247,7 @@ export interface Model<S = any, SS = S> extends ModelConfig<S, SS> {
 export interface ModelConfig<S = any, SS = S> {
   name?: string
   state: S
+  lifecyle?: LifeCycle
   baseReducer?: (state: SS, action: Action) => SS
   reducers?: ModelReducers<S>
   effects?: ModelEffects<any>

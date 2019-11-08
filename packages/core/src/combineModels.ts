@@ -10,12 +10,14 @@ export function combineModels<
   models,
   reducers,
   effects,
+  lifecycle,
   baseReducer,
 }: {
   name: string
   models: M
   reducers?: RE
   effects?: E
+  lifecycle?: R.LifeCycle
   baseReducer?: R.ModelConfig<any>['baseReducer']
 }): R.CombinedModel<M, RE, E> {
   const modelKeys = Object.keys(models)
@@ -25,7 +27,7 @@ export function combineModels<
 
     if (typeof models[key] === 'object') {
       finalModels[key] = models[key]
-      validate([[!!models[key].baseReducer, 'SubModel.baseReducer will be ignore']])
+      validate([[!!models[key].baseReducer, 'SubModel.baseReducer not supported now!']])
     }
   })
   const finalModelKeys = Object.keys(finalModels)
@@ -52,6 +54,12 @@ export function combineModels<
   if (effects) {
     validate([[typeof effects === 'function', `Model.effects as function is not allowed`]])
     finalModel.effects[name] = effects
+  }
+  if (lifecycle) {
+    if (!effects) {
+      finalModel.effects[name] = {}
+    }
+    finalModel.effects[name].__init = lifecycle.init
   }
   finalModel.baseReducer = baseReducer
   return finalModel as any
