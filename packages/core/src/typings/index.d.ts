@@ -11,6 +11,10 @@ import * as Redux from 'redux'
 
 export as namespace rematch
 
+export type LifeCycle = {
+  init?(): void
+}
+
 export type CombinedModel<
   M extends Models = any,
   extraReducers extends ModelReducers<any> = any,
@@ -145,14 +149,14 @@ export type ModelDescriptor<
 > = {
   name?: string
   state: S
-  init?: Function &
+  baseReducer?: (state: SS, action: Action) => SS
+  reducers?: R
+  effects?: E &
     ThisType<
       ExtractRematchDispatchersFromReducers<R> &
         ExtractRematchDispatchersFromEffects<E> & { dispatch: (action: Action) => void }
     >
-  baseReducer?: (state: SS, action: Action) => SS
-  reducers?: R
-  effects?: E &
+  lifecycle?: LifeCycle &
     ThisType<
       ExtractRematchDispatchersFromReducers<R> &
         ExtractRematchDispatchersFromEffects<E> & { dispatch: (action: Action) => void }
@@ -171,13 +175,13 @@ export function combineModels<
   name,
   models,
   reducers,
-  init,
+  lifecycle,
   effects,
   baseReducer,
 }: {
   name: string
   models: M
-  init?: Function &
+  lifecycle?: LifeCycle &
     ThisType<
       ExtractRematchDispatchersFromReducers<R> &
         ExtractRematchDispatchersFromEffects<E> &

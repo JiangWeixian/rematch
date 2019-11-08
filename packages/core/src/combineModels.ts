@@ -10,14 +10,14 @@ export function combineModels<
   models,
   reducers,
   effects,
-  init,
+  lifecycle,
   baseReducer,
 }: {
   name: string
   models: M
   reducers?: RE
   effects?: E
-  init?: Function
+  lifecycle?: R.LifeCycle
   baseReducer?: R.ModelConfig<any>['baseReducer']
 }): R.CombinedModel<M, RE, E> {
   const modelKeys = Object.keys(models)
@@ -55,11 +55,11 @@ export function combineModels<
     validate([[typeof effects === 'function', `Model.effects as function is not allowed`]])
     finalModel.effects[name] = effects
   }
-  if (init) {
+  if (lifecycle) {
     if (!effects) {
       finalModel.effects[name] = {}
     }
-    finalModel.effects[name].__init = init
+    finalModel.effects[name].__init = lifecycle.init
   }
   finalModel.baseReducer = baseReducer
   return finalModel as any

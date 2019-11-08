@@ -5,6 +5,11 @@ export type DolphinsState = number
 
 export const dolphins = createModel({
   state: 0,
+  lifecycle: {
+    init() {
+      this.incrementAsync()
+    },
+  },
   reducers: {
     increment: state => state + 1,
   },
