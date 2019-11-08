@@ -77,8 +77,6 @@ const dispatchPlugin: R.Plugin = {
         }
       },
     })
-    // tslint:disable-next-line:no-console
-    console.log(this.reducers)
   },
 }
 
