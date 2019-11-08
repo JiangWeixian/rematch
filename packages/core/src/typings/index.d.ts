@@ -247,7 +247,7 @@ export interface Model<S = any, SS = S> extends ModelConfig<S, SS> {
 export interface ModelConfig<S = any, SS = S> {
   name?: string
   state: S
-  init?: Function
+  lifecyle?: LifeCycle
   baseReducer?: (state: SS, action: Action) => SS
   reducers?: ModelReducers<S>
   effects?: ModelEffects<any>
