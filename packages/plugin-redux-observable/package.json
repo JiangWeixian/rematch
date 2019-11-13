@@ -18,7 +18,7 @@
     "rematch2-observable"
   ],
   "repository": {
-    "url": "https://github.com/JiangWeixian/rematch2",
+    "url": "https://github.com/JiangWeixian/rematch-v2",
     "directory": "packages/plugin-redux-observable"
   },
   "peerDependencies": {
