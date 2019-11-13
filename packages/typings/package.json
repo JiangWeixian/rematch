@@ -1,0 +1,26 @@
+{
+  "name": "@rematch2/typings",
+  "version": "0.0.0",
+  "description": "types of @rematch2/core",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo test",
+    "build": "echo build"
+  },
+  "keywords": [
+    "rematch2",
+    "typings"
+  ],
+  "repository": {
+    "url": "https://github.com/JiangWeixian/rematch-v2",
+    "directory": "packages/typings"
+  },
+  "author": "JW",
+  "license": "MIT",
+  "peerDependencies": {
+    "redux": ">=4.0.4"
+  },
+  "devDependencies": {
+    "redux": "4.0.4"
+  }
+}
