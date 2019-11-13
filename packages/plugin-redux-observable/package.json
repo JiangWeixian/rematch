@@ -1,6 +1,6 @@
 {
   "name": "@rematch2/redux-observable",
-  "version": "0.0.0",
+  "version": "0.0.4-alpha.0",
   "main": "lib/rematch-redux-observable.cjs.js",
   "module": "lib/rematch-redux-observable.esm.js",
   "browser": "lib/rematch-redux-observable.umd.js",
@@ -22,9 +22,9 @@
     "directory": "packages/plugin-redux-observable"
   },
   "peerDependencies": {
+    "@rematch2/core": "*",
     "redux": ">=4.0.4",
-    "rxjs": ">=6.0.0-beta.0 <7",
-    "@rematch2/core": "*"
+    "rxjs": ">=6.0.0-beta.0 <7"
   },
   "dependencies": {
     "redux-observable": "1.2.0"

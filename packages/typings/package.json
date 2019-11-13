@@ -1,6 +1,6 @@
 {
   "name": "@rematch2/typings",
-  "version": "0.0.0",
+  "version": "0.0.4-alpha.0",
   "description": "types of @rematch2/core",
   "types": "index.d.ts",
   "scripts": {
