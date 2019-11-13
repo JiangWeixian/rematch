@@ -22,5 +22,6 @@
   },
   "devDependencies": {
     "redux": "4.0.4"
-  }
+  },
+  "gitHead": "e8f6c3cdac286d79906bf387a6fc366171a66364"
 }

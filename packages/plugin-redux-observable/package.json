@@ -30,7 +30,7 @@
     "redux-observable": "1.2.0"
   },
   "devDependencies": {
-    "@rematch2/core": "../core",
+    "@rematch2/core": "^0.0.5-alpha.0",
     "@types/jest": "24.0.18",
     "husky": "3.0.1",
     "jest": "24.9.0",
@@ -61,5 +61,6 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  }
+  },
+  "gitHead": "e8f6c3cdac286d79906bf387a6fc366171a66364"
 }
