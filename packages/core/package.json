@@ -1,6 +1,6 @@
 {
   "name": "@rematch2/core",
-  "version": "0.0.3-alpha.0",
+  "version": "0.0.7-alpha.0",
   "description": "rethink rematch",
   "license": "MIT",
   "publishConfig": {
@@ -119,5 +119,5 @@
     "typings-tester": "0.3.2",
     "uglify-es": "3.3.9"
   },
-  "gitHead": "fc0d837019f4259458f85f72b7672ca8dc13da09"
+  "gitHead": "9a195fee138bc9b48d8bace4b0743cc3789aad34"
 }
