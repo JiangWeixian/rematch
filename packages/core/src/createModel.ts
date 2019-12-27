@@ -19,7 +19,6 @@ export function createModel<S, RE extends R.ModelReducers<any>, E extends R.Mode
     if (!model.effects) {
       model.effects = {} as E
     }
-    // tslint:disable-next-line:align semicolon
     ;(model.effects as any).__init = model.lifecycle.init
   }
   return model as R.ModelDescriptor<S, RE, E, SS>

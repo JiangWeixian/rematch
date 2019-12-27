@@ -9,13 +9,10 @@
 	"rules": {
 		"prettier": true,
 		"no-string-literal": false,
-		"align": [true, "parameters", "statements"],
+		"align": [true, "parameters"],
 		"arrow-parens": false,
 		"quotemark": false,
-		"semicolon": [
-			true,
-			"never"
-		],
+		"semicolon": false,
 		"ban-types": false,
 		"interface-name": false,
 		"no-submodule-imports": false,
