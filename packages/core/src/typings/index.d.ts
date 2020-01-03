@@ -23,6 +23,7 @@ export type CombinedModel<
   name?: string
   init?: Function
   state: ExtractRematchStateFromModels<M>
+  getters?: ModelGetters<ExtractRematchStateFromModels<M>>,
   baseReducer?: (
     state: ExtractRematchStateFromModels<M>,
     action: Action,
@@ -46,6 +47,14 @@ export type ExtractRematchStateFromModels<M extends Models> = {
 }
 
 export type RematchRootState<M extends Models> = ExtractRematchStateFromModels<M>
+
+export type ExtractRematchGetters<getters extends ModelConfig['getters']> = getters extends ModelGetters ? ExtractRematchGettersObject<getters> : {}
+
+export type ExtractRematchGettersObject<getters extends ModelGetters> = {
+  [getterKey in keyof getters]: ExtractRematchGetter<getters[getterKey]>
+}
+
+export type ExtractRematchGetter<G> = G extends (params: any[]) => any ? ReturnType<G> : void
 
 export type ExtractRematchDispatcherAsyncFromEffect<E> = E extends () => Promise<any>
   ? RematchDispatcherAsync<void, void>
@@ -145,12 +154,14 @@ export type ModelDescriptor<
   S,
   R extends ModelReducers<any>,
   E extends ModelEffects<any>,
+  G extends ModelGetters<any>,
   SS = S
 > = {
   name?: string
   state: S
   baseReducer?: (state: SS, action: Action) => SS
   reducers?: R
+  getters?: G
   effects?: E &
     ThisType<
       ExtractRematchDispatchersFromReducers<R> &
@@ -163,9 +174,9 @@ export type ModelDescriptor<
     >
 }
 
-export function createModel<S, R extends ModelReducers<S>, E extends ModelEffects<S>>(
-  model: ModelDescriptor<S, R, E>,
-): ModelDescriptor<S, R, E>
+export function createModel<S, R extends ModelReducers<S>, E extends ModelEffects<S>, G extends ModelGetters<S>>(
+  model: ModelDescriptor<S, R, E, G>,
+): ModelDescriptor<S, R, E, G>
 
 export function combineModels<
   M extends Models,
@@ -223,6 +234,10 @@ export type EnhancedReducers = {
   [key: string]: EnhancedReducer<any>
 }
 
+export type ModelGetters<S = any> = {
+  [key: string]: (state: S) => any
+}
+
 export type ModelReducers<S = any> = {
   [key: string]: (state: S, payload: any, meta?: any) => S
 }
@@ -247,6 +262,7 @@ export interface Model<S = any, SS = S> extends ModelConfig<S, SS> {
 export interface ModelConfig<S = any, SS = S> {
   name?: string
   state: S
+  getters?: ModelGetters<S>
   lifecyle?: LifeCycle
   baseReducer?: (state: SS, action: Action) => SS
   reducers?: ModelReducers<S>

@@ -12,9 +12,13 @@ export const city = combineModels({
   reducers: {
     incrementCity: state => {
       return {
+        ...state,
         person: state.person + 1,
         zoo: {
-          dolphins: state.zoo.dolphins + 1,
+          dolphins: {
+            ...state.zoo.dolphins,
+            cnt: state.zoo.dolphins.cnt + 1
+          },
           sharks: state.zoo.sharks + 1,
         },
       }
