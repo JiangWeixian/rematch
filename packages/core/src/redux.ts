@@ -41,6 +41,7 @@ const recurCreateModelReducer = (
   prefix: string,
   modelState: any,
   reducers: any,
+  getters: any,
   combineReducers: Function,
 ): Function => {
   const rootReducers = {}
@@ -62,13 +63,20 @@ const recurCreateModelReducer = (
             nextPrefix,
             modelState[key],
             reducers[key],
+            getters[key],
             combineReducers,
           )
         }
       })
     const combinedReducers = combineReducers(rootReducers)
     if (!isCombined) {
-      return combinedReducers
+      return (state: any = modelState, action: R.Action) => {
+        const nextState = combinedReducers(state, action)
+        return {
+          ...nextState,
+          getters: getters[modelName] ? getters[modelName](nextState) : undefined,
+        }
+      }
     } else {
       return (state: any = modelState, action: R.Action) => {
         if (typeof extraReducers[action.type] === 'function') {
@@ -84,7 +92,11 @@ const recurCreateModelReducer = (
     })
     return (state: any = modelState, action: R.Action) => {
       if (typeof rootReducers[action.type] === 'function') {
-        return rootReducers[action.type](state, action.payload, action.meta)
+        const nextState = rootReducers[action.type](state, action.payload, action.meta)
+        return {
+          ...nextState,
+          getters: typeof getters === 'function' ? getters(nextState) : undefined,
+        }
       }
       return state
     }
@@ -116,6 +128,7 @@ export default function({ redux, models }: { redux: R.ConfigRedux; models: R.Mod
       model.name,
       model.state,
       model.reducers || {},
+      model.getters || {},
       combineReducers,
     )
     const extraReducers = {}

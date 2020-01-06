@@ -15,6 +15,7 @@ const pkg = require('./package.json')
 const productionPlugins = [
   typescript({
     typescript: require('typescript'),
+    esModuleInterop: true
   }),
   replace({
     'process.env.NODE_ENV': "'production'",

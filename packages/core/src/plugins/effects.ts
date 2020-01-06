@@ -22,7 +22,7 @@ const effectsPlugin: R.Plugin = {
     walk({
       modelName: model.name,
       prefix: model.name,
-      effectsOrreducers: model.effects,
+      effectsOrReducers: model.effects,
       actions: this.actions[model.name],
       dispatch: this.dispatch[model.name],
       onActionCallback: (prefix, key, actions, dispatch, effect) => {

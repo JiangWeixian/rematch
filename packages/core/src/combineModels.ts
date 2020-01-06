@@ -1,15 +1,18 @@
 import * as R from './typings'
+import { createGetters } from './utils/createGetters'
 import { validate } from './utils/validate'
 
 export function combineModels<
   M extends R.Models,
   RE extends R.ModelReducers<R.ExtractRematchStateFromModels<M>>,
-  E extends R.ModelEffects<any>
+  E extends R.ModelEffects<any>,
+  G extends R.ModelGetters<any>
 >({
   name,
   models,
   reducers,
   effects,
+  getters,
   lifecycle,
   baseReducer,
 }: {
@@ -17,6 +20,7 @@ export function combineModels<
   models: M
   reducers?: RE
   effects?: E
+  getters?: G
   lifecycle?: R.LifeCycle
   baseReducer?: R.ModelConfig<any>['baseReducer']
 }): R.CombinedModel<M, RE, E> {
@@ -36,6 +40,7 @@ export function combineModels<
     state: {},
     reducers: {},
     effects: {},
+    getters: {},
     baseReducer,
   }
   // set state, reducers, effects
@@ -47,6 +52,9 @@ export function combineModels<
     if (finalModels[key].effects) {
       finalModel.effects[key] = finalModels[key].effects
     }
+    if (finalModels[key].getters) {
+      finalModel.getters[key] = finalModels[key].getters
+    }
   })
   if (reducers) {
     finalModel.reducers[name] = reducers
@@ -54,6 +62,9 @@ export function combineModels<
   if (effects) {
     validate([[typeof effects === 'function', `Model.effects as function is not allowed`]])
     finalModel.effects[name] = effects
+  }
+  if (getters) {
+    finalModel.getters[name] = createGetters(getters)
   }
   if (lifecycle) {
     if (!effects) {

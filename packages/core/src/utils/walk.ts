@@ -38,26 +38,26 @@ type ActionCallback = (
 export const walk = ({
   modelName,
   prefix,
-  effectsOrreducers,
+  effectsOrReducers,
   actions,
   dispatch,
   onActionCallback,
 }: {
   modelName: string
   prefix: string
-  effectsOrreducers: any
+  effectsOrReducers: any
   actions: any
   dispatch: Function
   onActionCallback?: ActionCallback
 }) => {
-  const keys = Object.keys(effectsOrreducers)
-  if (isModels(effectsOrreducers)) {
+  const keys = Object.keys(effectsOrReducers)
+  if (isModels(effectsOrReducers)) {
     keys.forEach(key => {
       if (prefix.endsWith(key)) {
         walk({
           modelName,
           prefix,
-          effectsOrreducers: effectsOrreducers[key],
+          effectsOrReducers: effectsOrReducers[key],
           actions,
           dispatch,
           onActionCallback,
@@ -69,7 +69,7 @@ export const walk = ({
         walk({
           modelName,
           prefix: nextPrefix,
-          effectsOrreducers: effectsOrreducers[key],
+          effectsOrReducers: effectsOrReducers[key],
           actions: actions[key],
           dispatch: dispatch[key],
           onActionCallback,
@@ -88,11 +88,11 @@ export const walk = ({
         ],
         [key === 'dispatch', `Effect or Reducer can not named 'dispatch'`],
         [
-          typeof effectsOrreducers[key] !== 'function',
+          typeof effectsOrReducers[key] !== 'function',
           `Invalid effect or reducer (${prefix}/${key}). Must be a function`,
         ],
       ])
-      onActionCallback(prefix, key, actions, dispatch, effectsOrreducers[key])
+      onActionCallback(prefix, key, actions, dispatch, effectsOrReducers[key])
     })
   }
 }

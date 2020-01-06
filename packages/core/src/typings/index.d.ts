@@ -18,12 +18,13 @@ export type LifeCycle = {
 export type CombinedModel<
   M extends Models = any,
   extraReducers extends ModelReducers<any> = any,
-  extraEffects extends ModelEffects<any> = any
+  extraEffects extends ModelEffects<any> = any,
+  G extends ModelGetters<any> = any
 > = {
   name?: string
   init?: Function
   state: ExtractRematchStateFromModels<M>
-  getters?: ModelGetters<ExtractRematchStateFromModels<M>>,
+  getters?: G
   baseReducer?: (
     state: ExtractRematchStateFromModels<M>,
     action: Action,
@@ -48,7 +49,9 @@ export type ExtractRematchStateFromModels<M extends Models> = {
 
 export type RematchRootState<M extends Models> = ExtractRematchStateFromModels<M>
 
-export type ExtractRematchGetters<getters extends ModelConfig['getters']> = getters extends ModelGetters ? ExtractRematchGettersObject<getters> : {}
+export type ExtractRematchGetters<
+  getters extends ModelConfig['getters']
+> = getters extends ModelGetters ? ExtractRematchGettersObject<getters> : {}
 
 export type ExtractRematchGettersObject<getters extends ModelGetters> = {
   [getterKey in keyof getters]: ExtractRematchGetter<getters[getterKey]>
@@ -174,19 +177,24 @@ export type ModelDescriptor<
     >
 }
 
-export function createModel<S, R extends ModelReducers<S>, E extends ModelEffects<S>, G extends ModelGetters<S>>(
-  model: ModelDescriptor<S, R, E, G>,
-): ModelDescriptor<S, R, E, G>
+export function createModel<
+  S,
+  R extends ModelReducers<S>,
+  E extends ModelEffects<S>,
+  G extends ModelGetters<S>
+>(model: ModelDescriptor<S, R, E, G>): ModelDescriptor<S, R, E, G>
 
 export function combineModels<
   M extends Models,
   R extends ModelReducers<ExtractRematchStateFromModels<M>>,
-  E extends ModelEffects<ExtractRematchStateFromModels<M>>
+  E extends ModelEffects<ExtractRematchStateFromModels<M>>,
+  G extends ModelGetters<ExtractRematchStateFromModels<M>>
 >({
   name,
   models,
   reducers,
   lifecycle,
+  getters,
   effects,
   baseReducer,
 }: {
@@ -198,6 +206,7 @@ export function combineModels<
         ExtractRematchDispatchersFromEffects<E> &
         ExtractRematchDispatchersFromModels<M> & { dispatch: (action: Action) => void }
     >
+  getters?: G
   baseReducer?: ModelConfig<ExtractRematchStateFromModels<M>>['baseReducer']
   reducers?: R
   effects?: E &
@@ -206,7 +215,7 @@ export function combineModels<
         ExtractRematchDispatchersFromEffects<E> &
         ExtractRematchDispatchersFromModels<M> & { dispatch: (action: Action) => void }
     >
-}): CombinedModel<M, R, E>
+}): CombinedModel<M, R, E, G>
 
 export namespace rematch {
   export function init<M extends Models>(config: InitConfig<M> | undefined): RematchStore<M>
