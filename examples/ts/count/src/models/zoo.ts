@@ -9,10 +9,18 @@ export const zoo = combineModels({
     dolphins,
     sharks,
   },
+  getters: {
+    bigger: function(state) {
+      return state.dolphins.cnt > 5
+    },
+  },
   reducers: {
     incrementDolphinsAndSharks: state => {
       return {
-        dolphins: state.dolphins + 1,
+        dolphins: {
+          ...state.dolphins,
+          cnt: state.dolphins.cnt + 1,
+        },
         sharks: state.sharks + 1,
       }
     },

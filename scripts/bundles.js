@@ -24,4 +24,3 @@ console.log('Minified Bundle Sizes')
 printSizeCJS('cjs')
 printSize('esm')
 printSize('umd')
-

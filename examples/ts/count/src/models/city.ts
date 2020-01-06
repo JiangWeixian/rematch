@@ -17,7 +17,7 @@ export const city = combineModels({
         zoo: {
           dolphins: {
             ...state.zoo.dolphins,
-            cnt: state.zoo.dolphins.cnt + 1
+            cnt: state.zoo.dolphins.cnt + 1,
           },
           sharks: state.zoo.sharks + 1,
         },
