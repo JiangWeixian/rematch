@@ -70,13 +70,7 @@ const recurCreateModelReducer = (
       })
     const combinedReducers = combineReducers(rootReducers)
     if (!isCombined) {
-      return (state: any = modelState, action: R.Action) => {
-        const nextState = combinedReducers(state, action)
-        return {
-          ...nextState,
-          getters: getters[modelName] ? getters[modelName](nextState) : undefined,
-        }
-      }
+      return combinedReducers
     } else {
       return (state: any = modelState, action: R.Action) => {
         if (typeof extraReducers[action.type] === 'function') {
@@ -93,12 +87,19 @@ const recurCreateModelReducer = (
     return (state: any = modelState, action: R.Action) => {
       if (typeof rootReducers[action.type] === 'function') {
         const nextState = rootReducers[action.type](state, action.payload, action.meta)
-        return {
-          ...nextState,
-          getters: typeof getters === 'function' ? getters(nextState) : undefined,
-        }
+        return typeof getters !== 'function'
+          ? nextState
+          : {
+              ...nextState,
+              getters: getters(nextState),
+            }
       }
-      return state
+      return typeof getters !== 'function'
+        ? state
+        : {
+            ...state,
+            getters: getters(state),
+          }
     }
   }
 }
@@ -131,17 +132,31 @@ export default function({ redux, models }: { redux: R.ConfigRedux; models: R.Mod
       model.getters || {},
       combineReducers,
     )
-    const extraReducers = {}
+    const selfReducers = {}
+    const selfGetters = model.getters?.[model.name]
     if (model.reducers[model.name]) {
       Object.keys(model.reducers[model.name]).forEach(key => {
-        extraReducers[`${model.name}/${key}`] = model.reducers[model.name][key]
+        selfReducers[`${model.name}/${key}`] = model.reducers[model.name][key]
       })
     }
     const combinedReducer = (state: any = model.state, action: R.Action) => {
-      if (extraReducers && typeof extraReducers[action.type] === 'function') {
-        return extraReducers[action.type](state, action.payload, action.meta)
+      let nextState
+      if (selfReducers && typeof selfReducers[action.type] === 'function') {
+        nextState = selfReducers[action.type](state, action.payload, action.meta)
+        return !selfGetters
+          ? nextState
+          : {
+              ...nextState,
+              getters: selfGetters?.(nextState),
+            }
       }
-      return modelReducer(state, action)
+      nextState = modelReducer(state, action)
+      return !selfGetters
+        ? nextState
+        : {
+            ...nextState,
+            getters: selfGetters?.(nextState),
+          }
     }
 
     this.reducers[model.name] = !modelBaseReducer

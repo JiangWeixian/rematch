@@ -15,9 +15,14 @@ export function createModel<S, RE extends R.ModelReducers<any>, E extends R.Mode
       model.effects && typeof model.effects === 'function',
       `Model.effects as function is not allowed`,
     ],
+    [
+      model.getters && typeof model.state !== 'object',
+      `Model.state should be object if Model.getters exited`,
+    ],
   ])
   if (model.getters) {
     model.getters = createGetters(model.getters)
+    model.state['getters'] = model.getters(model.state)
   }
   if (model.lifecycle) {
     if (!model.effects) {
