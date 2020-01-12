@@ -14,7 +14,6 @@ export const dolphins = createModel({
   },
   getters: {
     more: function({ cnt }) {
-      console.log('res')
       return cnt > 10
     },
   },

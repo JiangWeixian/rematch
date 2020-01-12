@@ -12,7 +12,6 @@ const mapState = (state: RootState) => ({
   cityPerson: state.city.person,
   cityZoo: state.city.zoo,
   more: state.dolphins.getters.more,
-  state,
 })
 
 const mapDispatch = (dispatch: Dispatch) => ({
@@ -36,7 +35,6 @@ type Props = connectedProps
 
 function Count(props: Props) {
   const incrementTwoModels = useIncrement()
-  console.log(props)
   return (
     <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
       <div style={{ width: 120 }}>
@@ -60,7 +58,7 @@ function Count(props: Props) {
       </div>
       <div style={{ width: 200 }}>
         <h3>Zoo.Dolphins</h3>
-        <h1>{props.zooDolphins.cnt}</h1>
+        {/* <h1>{props.zooDolphins.cnt}</h1> */}
         <button onClick={() => props.incrementZooDolphins()}>+1</button>
         <button onClick={props.incrementZooDolphinsAsync}>Async +1</button>
       </div>
@@ -73,15 +71,14 @@ function Count(props: Props) {
       <div style={{ width: 200 }}>
         <h3>Zoo.Sharks and Dolphins</h3>
         <h1>{props.zooSharks}</h1>
-        <h1>{props.zooDolphins.cnt}</h1>
         <button onClick={props.incrementZooSharksAndDolphins}>+1</button>
         <button onClick={props.incrementZooSharksAndDolphinsAsync}>Async +1</button>
       </div>
       <div style={{ width: 200 }}>
         <h3>City.Zoo and Person</h3>
-        <h1>
+        {/* <h1>
           {props.cityZoo.dolphins.cnt} and {props.cityZoo.sharks}
-        </h1>
+        </h1> */}
         <h1>{props.cityPerson}</h1>
         <button onClick={props.incrementCityPerson}>+1</button>
         <button onClick={props.incremetnCityZooDolphins}>Async +1</button>
@@ -89,7 +86,7 @@ function Count(props: Props) {
       <div style={{ width: 200 }}>
         <h3>Dolphins getters</h3>
         <h1>
-          {props.more}
+          {props.more ? 'true' : 'false'}
         </h1>
       </div>
     </div>
