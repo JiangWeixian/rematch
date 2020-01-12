@@ -44,7 +44,7 @@ export type CombinedModel<
 }
 
 export type ExtractRematchStateFromModels<M extends Models> = {
-  [modelKey in keyof M]: M[modelKey]['state']
+  [modelKey in keyof M]: M[modelKey]['state'] & { getters?: ExtractRematchGettersObject<M[modelKey]['getters']> }
 }
 
 export type RematchRootState<M extends Models> = ExtractRematchStateFromModels<M>
@@ -57,7 +57,7 @@ export type ExtractRematchGettersObject<getters extends ModelGetters> = {
   [getterKey in keyof getters]: ExtractRematchGetter<getters[getterKey]>
 }
 
-export type ExtractRematchGetter<G> = G extends (params: any[]) => any ? ReturnType<G> : void
+export type ExtractRematchGetter<G> = G extends (state: infer S) => infer P ? P : void
 
 export type ExtractRematchDispatcherAsyncFromEffect<E> = E extends () => Promise<any>
   ? RematchDispatcherAsync<void, void>

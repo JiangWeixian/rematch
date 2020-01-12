@@ -11,6 +11,8 @@ const mapState = (state: RootState) => ({
   zooSharks: state.zoo.sharks,
   cityPerson: state.city.person,
   cityZoo: state.city.zoo,
+  more: state.dolphins.getters.more,
+  state,
 })
 
 const mapDispatch = (dispatch: Dispatch) => ({
@@ -34,8 +36,9 @@ type Props = connectedProps
 
 function Count(props: Props) {
   const incrementTwoModels = useIncrement()
+  console.log(props)
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
       <div style={{ width: 120 }}>
         <h3>Dolphins</h3>
         <h1>{props.dolphins.cnt}</h1>
@@ -82,6 +85,12 @@ function Count(props: Props) {
         <h1>{props.cityPerson}</h1>
         <button onClick={props.incrementCityPerson}>+1</button>
         <button onClick={props.incremetnCityZooDolphins}>Async +1</button>
+      </div>
+      <div style={{ width: 200 }}>
+        <h3>Dolphins getters</h3>
+        <h1>
+          {props.more}
+        </h1>
       </div>
     </div>
   )
