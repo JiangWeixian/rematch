@@ -85,6 +85,7 @@ const recurCreateModelReducer = (
       rootReducers[nextPrefix] = reducers[key]
     })
     return (state: any = modelState, action: R.Action) => {
+      console.warn(getters, action)
       if (typeof rootReducers[action.type] === 'function') {
         const nextState = rootReducers[action.type](state, action.payload, action.meta)
         return typeof getters !== 'function'
