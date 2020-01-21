@@ -46,7 +46,10 @@ const dispatchPlugin: R.Plugin = {
         return action
       }
     },
+    // a nested object contain functions, which will create redux(reducers|effects) action object
     actions: {},
+    // a plain object contain reducer functions, which will dispatch reducer action
+    reducers: {},
   },
 
   // access store.dispatch after store is created
@@ -75,6 +78,7 @@ const dispatchPlugin: R.Plugin = {
           const action = actions[key](payload, meta)
           this.dispatch(action)
         }
+        this.reducers[`${prefix}/${key}`] = dispatch[key]
       },
     })
   },

@@ -13,6 +13,9 @@ export const createGetters = (getters: R.ModelGetters<any> = EMPTY_GETTERS) => {
     Object.keys(memoizeGetters).forEach(k => {
       result[k] = memoizeGetters[k](state)
     })
-    return result
+    return {
+      ...state,
+      getters: result,
+    }
   }
 }

@@ -52,9 +52,6 @@ export function combineModels<
     if (finalModels[key].effects) {
       finalModel.effects[key] = finalModels[key].effects
     }
-    if (finalModels[key].getters) {
-      finalModel.getters[key] = finalModels[key].getters
-    }
   })
   if (reducers) {
     finalModel.reducers[name] = reducers
@@ -64,7 +61,8 @@ export function combineModels<
     finalModel.effects[name] = effects
   }
   if (getters) {
-    finalModel.getters[name] = createGetters(getters)
+    finalModel.reducers[name]['__getters'] = createGetters(getters)
+    finalModel.state = finalModel.reducers[name]['__getters'](finalModel.state)
   }
   if (lifecycle) {
     if (!effects) {

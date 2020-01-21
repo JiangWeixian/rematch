@@ -7,9 +7,9 @@ import { validate } from './utils/validate'
  * @param model
  */
 
-export function createModel<S, RE extends R.ModelReducers<any>, E extends R.ModelEffects<any>, SS>(
-  model: R.ModelDescriptor<S, RE, E, any, SS>,
-): R.ModelDescriptor<S, RE, E, any, SS> {
+export function createModel<S, SS>(
+  model: R.ModelDescriptor<S, any, any, any, SS>,
+): R.ModelDescriptor<S, any, any, any, SS> {
   validate([
     [
       model.effects && typeof model.effects === 'function',
@@ -21,14 +21,14 @@ export function createModel<S, RE extends R.ModelReducers<any>, E extends R.Mode
     ],
   ])
   if (model.getters) {
-    model.getters = createGetters(model.getters)
-    model.state['getters'] = model.getters(model.state)
+    model.reducers.__getters = createGetters(model.getters)
+    model.state = model.reducers.__getters(model.state)
   }
   if (model.lifecycle) {
     if (!model.effects) {
-      model.effects = {} as E
+      model.effects = {}
     }
-    ;(model.effects as any).__init = model.lifecycle.init
+    model.effects.__init = model.lifecycle.init
   }
-  return model as R.ModelDescriptor<S, RE, E, any, SS>
+  return model as R.ModelDescriptor<S, any, any, any, SS>
 }

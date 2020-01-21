@@ -11,7 +11,6 @@ export const zoo = combineModels({
   },
   getters: {
     bigger(state) {
-      console.log(state.dolphins.cnt)
       return state.dolphins.cnt > 5
     },
   },

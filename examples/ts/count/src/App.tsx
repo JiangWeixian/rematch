@@ -11,7 +11,6 @@ const mapState = (state: RootState) => ({
   zooSharks: state.zoo.sharks,
   cityPerson: state.city.person,
   cityZoo: state.city.zoo,
-  more: state.dolphins.getters.more,
 })
 
 const mapDispatch = (dispatch: Dispatch) => ({
@@ -82,12 +81,6 @@ function Count(props: Props) {
         <h1>{props.cityPerson}</h1>
         <button onClick={props.incrementCityPerson}>+1</button>
         <button onClick={props.incremetnCityZooDolphins}>Async +1</button>
-      </div>
-      <div style={{ width: 200 }}>
-        <h3>Dolphins getters</h3>
-        <h1>
-          {props.more ? 'true' : 'false'}
-        </h1>
       </div>
     </div>
   )

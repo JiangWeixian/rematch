@@ -10,7 +10,7 @@ import { walk } from '../utils/walk'
  */
 const effectsPlugin: R.Plugin = {
   exposed: {
-    // expose effects for access from dispatch plugin
+    // a plain object contain reducer functions, which will dispatch effect action
     effects: {},
   },
 
@@ -33,6 +33,8 @@ const effectsPlugin: R.Plugin = {
           this.dispatch(action)
         }
         dispatch[key].isEffect = true
+        this.effects[`${prefix}/${key}`].isEffect = true
+        this.effects[`${prefix}/${key}`].isGetter = key.includes('__getters')
       },
     })
     this.dispatch[model.name].dispatch = this.dispatch
@@ -42,7 +44,7 @@ const effectsPlugin: R.Plugin = {
   middleware(store) {
     return next => async (action: R.Action) => {
       // async/await acts as promise middleware
-      if (action.type in this.effects) {
+      if (action.type in this.effects && !this.effects[action.type].isGetter) {
         await next(action)
         return this.effects[action.type](
           action.payload,

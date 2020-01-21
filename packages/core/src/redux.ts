@@ -41,7 +41,6 @@ const recurCreateModelReducer = (
   prefix: string,
   modelState: any,
   reducers: any,
-  getters: any,
   combineReducers: Function,
 ): Function => {
   const rootReducers = {}
@@ -63,7 +62,6 @@ const recurCreateModelReducer = (
             nextPrefix,
             modelState[key],
             reducers[key],
-            getters[key],
             combineReducers,
           )
         }
@@ -85,22 +83,10 @@ const recurCreateModelReducer = (
       rootReducers[nextPrefix] = reducers[key]
     })
     return (state: any = modelState, action: R.Action) => {
-      console.warn(getters, action)
       if (typeof rootReducers[action.type] === 'function') {
-        const nextState = rootReducers[action.type](state, action.payload, action.meta)
-        return typeof getters !== 'function'
-          ? nextState
-          : {
-              ...nextState,
-              getters: getters(nextState),
-            }
+        return rootReducers[action.type](state, action.payload, action.meta)
       }
-      return typeof getters !== 'function'
-        ? state
-        : {
-            ...state,
-            getters: getters(state),
-          }
+      return state
     }
   }
 }
@@ -130,34 +116,19 @@ export default function({ redux, models }: { redux: R.ConfigRedux; models: R.Mod
       model.name,
       model.state,
       model.reducers || {},
-      model.getters || {},
       combineReducers,
     )
     const selfReducers = {}
-    const selfGetters = model.getters?.[model.name]
     if (model.reducers[model.name]) {
       Object.keys(model.reducers[model.name]).forEach(key => {
         selfReducers[`${model.name}/${key}`] = model.reducers[model.name][key]
       })
     }
     const combinedReducer = (state: any = model.state, action: R.Action) => {
-      let nextState
       if (selfReducers && typeof selfReducers[action.type] === 'function') {
-        nextState = selfReducers[action.type](state, action.payload, action.meta)
-        return !selfGetters
-          ? nextState
-          : {
-              ...nextState,
-              getters: selfGetters?.(nextState),
-            }
+        return selfReducers[action.type](state, action.payload, action.meta)
       }
-      nextState = modelReducer(state, action)
-      return !selfGetters
-        ? nextState
-        : {
-            ...nextState,
-            getters: selfGetters?.(nextState),
-          }
+      return modelReducer(state, action)
     }
 
     this.reducers[model.name] = !modelBaseReducer
