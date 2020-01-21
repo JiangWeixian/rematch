@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { useIncrement } from './hooks/use-increment'
 import { Dispatch, RootState } from './store'
+import { Gap } from './models/dolphins'
 
 const mapState = (state: RootState) => ({
   dolphins: state.dolphins,
@@ -14,6 +15,7 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = (dispatch: Dispatch) => ({
+  x: dispatch.dolphins.incrementByEnum,
   incrementDolphins: dispatch.dolphins.increment,
   incrementDolphinsAsync: dispatch.dolphins.incrementAsync,
   incrementSharks: () => dispatch.sharks.increment(1),
@@ -34,6 +36,7 @@ type Props = connectedProps
 
 function Count(props: Props) {
   const incrementTwoModels = useIncrement()
+  props.x(Gap.S)
   return (
     <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
       <div style={{ width: 120 }}>
@@ -86,7 +89,4 @@ function Count(props: Props) {
   )
 }
 
-export default connect(
-  mapState,
-  mapDispatch,
-)(Count)
+export default connect(mapState, mapDispatch)(Count)
