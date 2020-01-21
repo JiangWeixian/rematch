@@ -9,11 +9,11 @@ export const city = combineModels({
     zoo,
     person,
   },
-  // getters: {
-  //   large(state) {
-  //     return state.person > 5
-  //   },
-  // },
+  getters: {
+    large(state) {
+      return state.person > 5
+    },
+  },
   reducers: {
     incrementCity: state => {
       return {

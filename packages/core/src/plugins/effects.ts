@@ -34,7 +34,6 @@ const effectsPlugin: R.Plugin = {
         }
         dispatch[key].isEffect = true
         this.effects[`${prefix}/${key}`].isEffect = true
-        this.effects[`${prefix}/${key}`].isGetter = key.includes('__getters')
       },
     })
     this.dispatch[model.name].dispatch = this.dispatch
@@ -44,7 +43,7 @@ const effectsPlugin: R.Plugin = {
   middleware(store) {
     return next => async (action: R.Action) => {
       // async/await acts as promise middleware
-      if (action.type in this.effects && !this.effects[action.type].isGetter) {
+      if (action.type in this.effects) {
         await next(action)
         return this.effects[action.type](
           action.payload,
