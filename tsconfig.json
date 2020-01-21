@@ -11,6 +11,7 @@
     "noImplicitThis": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "esModuleInterop": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true
   },

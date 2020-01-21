@@ -35,10 +35,10 @@ type Props = connectedProps
 function Count(props: Props) {
   const incrementTwoModels = useIncrement()
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
       <div style={{ width: 120 }}>
         <h3>Dolphins</h3>
-        <h1>{props.dolphins}</h1>
+        <h1>{props.dolphins.cnt}</h1>
         <button onClick={props.incrementDolphins}>+1</button>
         <button onClick={props.incrementDolphinsAsync}>Async +1</button>
       </div>
@@ -52,12 +52,12 @@ function Count(props: Props) {
       <div style={{ width: 200 }}>
         <h3>Sharks and Dolphins</h3>
         <h1>{props.sharks}</h1>
-        <h1>{props.dolphins}</h1>
+        <h1>{props.dolphins.cnt}</h1>
         <button onClick={incrementTwoModels}>+1</button>
       </div>
       <div style={{ width: 200 }}>
         <h3>Zoo.Dolphins</h3>
-        <h1>{props.zooDolphins}</h1>
+        {/* <h1>{props.zooDolphins.cnt}</h1> */}
         <button onClick={() => props.incrementZooDolphins()}>+1</button>
         <button onClick={props.incrementZooDolphinsAsync}>Async +1</button>
       </div>
@@ -70,15 +70,14 @@ function Count(props: Props) {
       <div style={{ width: 200 }}>
         <h3>Zoo.Sharks and Dolphins</h3>
         <h1>{props.zooSharks}</h1>
-        <h1>{props.zooDolphins}</h1>
         <button onClick={props.incrementZooSharksAndDolphins}>+1</button>
         <button onClick={props.incrementZooSharksAndDolphinsAsync}>Async +1</button>
       </div>
       <div style={{ width: 200 }}>
         <h3>City.Zoo and Person</h3>
-        <h1>
-          {props.cityZoo.dolphins} and {props.cityZoo.sharks}
-        </h1>
+        {/* <h1>
+          {props.cityZoo.dolphins.cnt} and {props.cityZoo.sharks}
+        </h1> */}
         <h1>{props.cityPerson}</h1>
         <button onClick={props.incrementCityPerson}>+1</button>
         <button onClick={props.incremetnCityZooDolphins}>Async +1</button>

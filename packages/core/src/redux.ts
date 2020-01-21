@@ -118,15 +118,15 @@ export default function({ redux, models }: { redux: R.ConfigRedux; models: R.Mod
       model.reducers || {},
       combineReducers,
     )
-    const extraReducers = {}
+    const selfReducers = {}
     if (model.reducers[model.name]) {
       Object.keys(model.reducers[model.name]).forEach(key => {
-        extraReducers[`${model.name}/${key}`] = model.reducers[model.name][key]
+        selfReducers[`${model.name}/${key}`] = model.reducers[model.name][key]
       })
     }
     const combinedReducer = (state: any = model.state, action: R.Action) => {
-      if (extraReducers && typeof extraReducers[action.type] === 'function') {
-        return extraReducers[action.type](state, action.payload, action.meta)
+      if (selfReducers && typeof selfReducers[action.type] === 'function') {
+        return selfReducers[action.type](state, action.payload, action.meta)
       }
       return modelReducer(state, action)
     }

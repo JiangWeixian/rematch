@@ -16,6 +16,7 @@
 		"ban-types": false,
 		"interface-name": false,
 		"no-submodule-imports": false,
+		"no-var-requires": false,
 		"no-console": [
 			true,
 			"log"

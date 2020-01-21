@@ -95,7 +95,8 @@
   },
   "types": "src/typings/index.d.ts",
   "dependencies": {
-    "redux": "^4.0.4"
+    "redux": "^4.0.4",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",
@@ -115,7 +116,7 @@
     "tslint": "5.18.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-plugin-prettier": "2.0.1",
-    "typescript": "3.5.3",
+    "typescript": "3.7.4",
     "typings-tester": "0.3.2",
     "uglify-es": "3.3.9"
   },

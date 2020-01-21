@@ -10,7 +10,7 @@ import { walk } from '../utils/walk'
  */
 const effectsPlugin: R.Plugin = {
   exposed: {
-    // expose effects for access from dispatch plugin
+    // a plain object contain reducer functions, which will dispatch effect action
     effects: {},
   },
 
@@ -22,7 +22,7 @@ const effectsPlugin: R.Plugin = {
     walk({
       modelName: model.name,
       prefix: model.name,
-      effectsOrreducers: model.effects,
+      effectsOrReducers: model.effects,
       actions: this.actions[model.name],
       dispatch: this.dispatch[model.name],
       onActionCallback: (prefix, key, actions, dispatch, effect) => {
@@ -33,6 +33,7 @@ const effectsPlugin: R.Plugin = {
           this.dispatch(action)
         }
         dispatch[key].isEffect = true
+        this.effects[`${prefix}/${key}`].isEffect = true
       },
     })
     this.dispatch[model.name].dispatch = this.dispatch
