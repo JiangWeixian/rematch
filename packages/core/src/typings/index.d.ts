@@ -9,7 +9,7 @@
 
 import * as Redux from 'redux'
 
-export as namespace rematch
+export as namespace rematch2
 
 export type LifeCycle = {
   init?(): void
@@ -44,7 +44,9 @@ export type CombinedModel<
 }
 
 export type ExtractRematchStateFromModels<M extends Models> = {
-  [modelKey in keyof M]: M[modelKey]['state'] & { getters?: ExtractRematchGettersObject<M[modelKey]['getters']> }
+  [modelKey in keyof M]: M[modelKey]['state'] & {
+    getters?: ExtractRematchGettersObject<M[modelKey]['getters']>
+  }
 }
 
 export type RematchRootState<M extends Models> = ExtractRematchStateFromModels<M>
@@ -59,7 +61,7 @@ export type ExtractRematchGettersObject<getters extends ModelGetters> = {
 
 export type ExtractRematchGetter<G> = G extends (state: infer S) => infer P ? P : void
 
-export type ExtractRematchDispatcherAsyncFromEffect<E> = E extends () => Promise<any>
+export type ExtractRematchDispatcherAsyncFromEffect<E> = E extends () => Promise<infer R>
   ? RematchDispatcherAsync<void, void>
   : E extends (payload: infer P) => Promise<any>
   ? RematchDispatcherAsync<P, void>
@@ -120,24 +122,20 @@ export type RematchDispatcher<P = void, M = void> = ((
 ) => Redux.Dispatch<Action<P, M>>) &
   ((action: Action<P, void>) => Redux.Dispatch<Action<P, void>>) &
   (P extends void
-    ? ((...args: any[]) => Action<any, any>)
+    ? (...args: any[]) => Action<any, any>
     : P extends boolean
-    ? ((payload: boolean) => Action<boolean, M>)
+    ? (payload: boolean) => Action<boolean, M>
     : M extends void
-    ? ((payload: P) => Action<P, void>)
+    ? (payload: P) => Action<P, void>
     : (payload: P, meta: M) => Action<P, M>)
 
-export type RematchDispatcherAsync<P = void, M = void> = ((
-  action: Action<P, M>,
-) => Promise<Redux.Dispatch<Action<P, M>>>) &
-  ((action: Action<P, void>) => Promise<Redux.Dispatch<Action<P, void>>>) &
-  (P extends void
-    ? ((...args: any[]) => Promise<Action<any, any>>)
-    : P extends boolean
-    ? ((payload: boolean) => Promise<Action<boolean, M>>)
-    : M extends void
-    ? ((payload: P) => Promise<Action<P, void>>)
-    : (payload: P, meta: M) => Promise<Action<P, M>>)
+export type RematchDispatcherAsync<P = void, M = void, R = void> = P extends void
+  ? (...args: any[]) => Promise<Action<any, any>>
+  : P extends boolean
+  ? (payload: boolean) => Promise<Action<boolean, M>>
+  : M extends void
+  ? (payload: P) => Promise<Action<P, void>>
+  : (payload: P, meta: M) => Promise<Action<P, M>>
 
 export type RematchDispatch<M extends Models | void = void> = (M extends Models
   ? ExtractRematchDispatchersFromModels<M>
@@ -147,7 +145,7 @@ export type RematchDispatch<M extends Models | void = void> = (M extends Models
       }
     }) &
   (RematchDispatcher | RematchDispatcherAsync) &
-  (Redux.Dispatch<any>) // for library compatability
+  Redux.Dispatch<any> // for library compatability
 
 export function init<M extends Models>(config: InitConfig<M> | undefined): RematchStore<M>
 
