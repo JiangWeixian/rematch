@@ -27,7 +27,7 @@ const effectsPlugin: R.Plugin = {
       dispatch: this.dispatch[model.name],
       onActionCallback: (prefix, key, actions, dispatch, effect) => {
         this.effects[`${prefix}/${key}`] = effect.bind(dispatch)
-        actions[key] = this.createDispatcher(prefix, key)
+        actions[key] = this.createActor(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
           const action = actions[key](payload, meta)
           return this.dispatch(action)
