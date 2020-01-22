@@ -262,14 +262,18 @@ describe('effects:', () => {
       name: 'example',
       state: 0,
       reducers: {
-        addOne: (state: number) => state + 1,
+        addOne: (state: number) => {
+          return state + 1
+        },
       },
       effects: {
         async asyncAddOne() {
           await this.addOne()
+          return true
         },
         async asyncCallAddOne() {
           await this.asyncAddOne()
+          return true
         },
       },
     }

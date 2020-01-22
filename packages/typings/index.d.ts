@@ -294,7 +294,7 @@ export interface Plugin<M extends Models = Models, A extends Action = Action> {
   storeGetState?(): any
   dispatch?: RematchDispatch<M>
   effects?: Object
-  createDispatcher?(modelName: string, reducerName: string): void
+  createActor?(modelName: string, reducerName: string): void
 }
 
 export interface RootReducers {

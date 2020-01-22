@@ -54,6 +54,7 @@ export default class Rematch {
         model.baseReducer !== undefined && typeof model.baseReducer !== 'function',
         'model "baseReducer" must be a function',
       ],
+      [typeof model.effects === 'function', `Model.effects as function is not allowed`],
     ])
     // run plugin model subscriptions
     this.forEachPlugin('onModel', onModel => onModel(model))

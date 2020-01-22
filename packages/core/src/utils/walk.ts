@@ -23,7 +23,7 @@ import { validate } from './validate'
  * }
  * ```
  * @param dispatch store.dispatch
- * @param createDispatcher dispatchPlugin.createDispatcher
+ * @param createActor dispatchPlugin.createActor
  * @param context
  */
 

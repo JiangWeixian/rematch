@@ -27,7 +27,10 @@ export function combineModels<
   const modelKeys = Object.keys(models)
   const finalModels = {} as R.Models
   modelKeys.forEach(key => {
-    validate([[typeof models[key] === 'undefined', `No model provided for key ${key}`]])
+    validate([
+      [typeof models[key] === 'undefined', `No model provided for key ${key}`],
+      [typeof effects === 'function', `Model.effects as function is not allowed`],
+    ])
 
     if (typeof models[key] === 'object') {
       finalModels[key] = models[key]

@@ -11,10 +11,8 @@ export function createModel<S, SS>(
   model: R.ModelDescriptor<S, any, any, any, SS>,
 ): R.ModelDescriptor<S, any, any, any, SS> {
   validate([
-    [
-      model.effects && typeof model.effects === 'function',
-      `Model.effects as function is not allowed`,
-    ],
+    [typeof model.effects === 'function', `Model.effects as function is not allowed`],
+    [model.getters && typeof model.getters !== 'object', `Model.getters should be object`],
     [
       model.getters && typeof model.state !== 'object',
       `Model.state should be object if Model.getters exited`,

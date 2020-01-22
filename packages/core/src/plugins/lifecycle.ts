@@ -4,10 +4,12 @@ import * as R from '../typings'
 /**
  * Lifecycle Plugin
  *
- * Plugin for handling init async actions
+ * Plugin for handling lifecycle
+ * 1. init
  */
 const initPlugin: R.Plugin = {
   onStoreCreated(store) {
+    // init
     Object.keys(this.effects).map(key => {
       if (key.endsWith('__init')) {
         store.dispatch({ type: key })

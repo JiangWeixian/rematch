@@ -120,6 +120,7 @@ describe('models：', () => {
 
       expect(zoo).toEqual({
         name: 'zoo',
+        baseReducer: undefined,
         state: {
           dolphins: 0,
           sharks: 0,
@@ -132,6 +133,7 @@ describe('models：', () => {
           dolphins: dolphins.effects,
           sharks: sharks.effects,
         },
+        getters: {},
       })
     })
 
@@ -148,6 +150,7 @@ describe('models：', () => {
 
       expect(zoo).toEqual({
         name: 'zoo',
+        baseReducer: undefined,
         state: {
           dolphins: 0,
           sharks: 0,
@@ -162,6 +165,7 @@ describe('models：', () => {
           sharks: sharks.effects,
           zoo: extraEffects,
         },
+        getters: {},
       })
     })
 
@@ -205,6 +209,7 @@ describe('models：', () => {
 
       expect(city).toEqual({
         name: 'city',
+        baseReducer: undefined,
         state: {
           person: 0,
           zoo: {
@@ -228,6 +233,7 @@ describe('models：', () => {
           person: person.effects,
           city: cityEffects,
         },
+        getters: {},
       })
     })
 
@@ -273,6 +279,7 @@ describe('models：', () => {
 
       expect(city).toEqual({
         name: 'city',
+        baseReducer: undefined,
         state: {
           zoo: {
             dolphins: 0,
@@ -298,6 +305,7 @@ describe('models：', () => {
           person: person.effects,
           city: cityEffects,
         },
+        getters: {},
       })
     })
   })

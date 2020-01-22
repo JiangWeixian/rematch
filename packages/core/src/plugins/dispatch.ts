@@ -28,13 +28,13 @@ const dispatchPlugin: R.Plugin = {
     },
 
     /**
-     * createDispatcher
+     * createActor
      *
      * genereates an action creator for a given model & reducer
      * @param modelName string
      * @param reducerName string
      */
-    createDispatcher(modelName: string, reducerName: string) {
+    createActor(modelName: string, reducerName: string) {
       return (payload?: any, meta?: any) => {
         const action: R.Action = { type: `${modelName}/${reducerName}` }
         if (typeof payload !== 'undefined') {
@@ -73,7 +73,7 @@ const dispatchPlugin: R.Plugin = {
       actions: this.actions[model.name],
       dispatch: this.dispatch[model.name],
       onActionCallback: (prefix, key, actions, dispatch, reducer) => {
-        actions[key] = this.createDispatcher(prefix, key)
+        actions[key] = this.createActor(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
           const action = actions[key](payload, meta)
           this.dispatch(action)
