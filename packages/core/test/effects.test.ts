@@ -1,7 +1,5 @@
 import { combineModels, createModel, init } from '../src'
 
-export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-
 describe('effects:', () => {
   test('should create an action', () => {
     const count = {
