@@ -1,5 +1,7 @@
 import { combineModels, createModel, init } from '../src'
 
+export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 describe('effects:', () => {
   test('should create an action', () => {
     const count = {
@@ -262,14 +264,18 @@ describe('effects:', () => {
       name: 'example',
       state: 0,
       reducers: {
-        addOne: (state: number) => state + 1,
+        addOne: (state: number) => {
+          return state + 1
+        },
       },
       effects: {
         async asyncAddOne() {
           await this.addOne()
+          return true
         },
         async asyncCallAddOne() {
           await this.asyncAddOne()
+          return true
         },
       },
     }

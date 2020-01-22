@@ -30,7 +30,7 @@ const effectsPlugin: R.Plugin = {
         actions[key] = this.createDispatcher(prefix, key)
         dispatch[key] = async (payload: any, meta: any) => {
           const action = actions[key](payload, meta)
-          this.dispatch(action)
+          return this.dispatch(action)
         }
         dispatch[key].isEffect = true
         this.effects[`${prefix}/${key}`].isEffect = true
