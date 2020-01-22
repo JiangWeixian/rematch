@@ -5,3 +5,4 @@
 
 1. 支持submodels
 2. 支持state异步初始化
+3. 支持getters
