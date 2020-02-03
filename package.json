@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/iftechio/rematch2#readme",
   "devDependencies": {
-    "husky": "3.0.1",
+    "husky": "^3.0.1",
     "lerna": "3.16.1",
     "prettier": "1.19.1",
     "pretty-quick": "2.0.1",
